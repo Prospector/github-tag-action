@@ -1,41 +1,33 @@
 {
-  "name": "github-tag-action",
-  "version": "5.0.0",
+  "name": "git-version-tagger",
+  "version": "1.0.0",
   "private": true,
-  "description": "A GitHub Action to automatically bump and tag master, on merge, with the latest SemVer formatted version.",
+  "description": "Creates tags on a repo from a GitHub Action",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
-    "test": "jest --testTimeout 10000",
-    "check": "prettier --check ."
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mathieudutour/github-tag-action.git"
+    "url": "git+https://github.com/Prospector/github-tag-action.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "Mathieu Dutour",
+  "author": "Prospector",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/github": "^2.2.0",
-    "@semantic-release/commit-analyzer": "^8.0.1",
-    "@semantic-release/release-notes-generator": "^9.0.1",
     "semver": "^7.3.2"
   },
   "devDependencies": {
     "@types/node": "^13.13.5",
     "@types/semver": "^7.1.0",
-    "jest": "^26.6.3",
-    "jest-circus": "^26.6.3",
     "js-yaml": "^3.14.0",
-    "prettier": "2.1.2",
-    "ts-jest": "^26.4.4",
     "typescript": "^3.8.3"
   }
 }

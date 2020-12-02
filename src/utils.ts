@@ -1,8 +1,7 @@
 import * as core from '@actions/core';
 import { Octokit } from '@octokit/rest';
-import { prerelease, rcompare, valid } from 'semver';
-import DEFAULT_RELEASE_TYPES from '@semantic-release/commit-analyzer/lib/default-release-types.js';
-import { compareCommits, listTags } from './github';
+import { rcompare, valid } from 'semver';
+import { listTags } from './github';
 
 export async function getValidTags() {
   const tags = await listTags();
@@ -22,71 +21,10 @@ export async function getValidTags() {
   return validTags;
 }
 
-export async function getCommits(sha: string) {
-  const commits = await compareCommits(sha);
-
-  return commits
-    .filter((commit) => !!commit.commit.message)
-    .map((commit) => ({
-      message: commit.commit.message,
-      hash: commit.sha,
-    }));
-}
-
 export function getBranchFromRef(ref: string) {
   return ref.replace('refs/heads/', '');
 }
 
 export function getLatestTag(tags: Octokit.ReposListTagsResponseItem[]) {
-  return (
-    tags.find((tag) => !prerelease(tag.name)) || {
-      name: '0.0.0',
-      commit: {
-        sha: 'HEAD',
-      },
-    }
-  );
-}
-
-export function getLatestPrereleaseTag(
-  tags: Octokit.ReposListTagsResponseItem[],
-  identifier: string
-) {
-  return tags
-    .filter((tag) => prerelease(tag.name))
-    .find((tag) => tag.name.match(identifier));
-}
-
-export function mapCustomReleaseRules(customReleaseTypes: string) {
-  const releaseRuleSeparator = ',';
-  const releaseTypeSeparator = ':';
-
-  return customReleaseTypes
-    .split(releaseRuleSeparator)
-    .map((customReleaseRule) => customReleaseRule.split(releaseTypeSeparator))
-    .filter((customReleaseRule) => {
-      if (customReleaseRule.length !== 2) {
-        core.warning(
-          `${customReleaseRule.join(
-            releaseTypeSeparator
-          )} is not a valid custom release definition.`
-        );
-        return false;
-      }
-      return true;
-    })
-    .map((customReleaseRule) => {
-      const [keyword, release] = customReleaseRule;
-      return {
-        type: keyword,
-        release,
-      };
-    })
-    .filter((customRelease) => {
-      if (!DEFAULT_RELEASE_TYPES.includes(customRelease.release)) {
-        core.warning(`${customRelease.release} is not a valid release type.`);
-        return false;
-      }
-      return true;
-    });
+  return tags[0];
 }
