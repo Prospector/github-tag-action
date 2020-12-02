@@ -8,7 +8,7 @@ import { createTag } from './github';
 
 export default async () => {
   try {
-    const versionType = core.getInput('versionType') as ReleaseType;
+    const versionType = core.getInput('version_type') as ReleaseType;
 
     const { GITHUB_REF, GITHUB_SHA } = process.env;
 
