@@ -1,6 +1,5 @@
 import { context, GitHub } from '@actions/github';
 import * as core from '@actions/core';
-import { Octokit } from '@octokit/rest';
 
 let octokitSingleton;
 
@@ -36,30 +35,12 @@ export async function compareCommits(sha: string) {
   return commits.data.commits;
 }
 
-export async function createTag(
-  newTag: string,
-  createAnnotatedTag: boolean,
-  GITHUB_SHA: string
-) {
+export async function createTag(newTag: string, GITHUB_SHA: string) {
   const octokit = getOctokitSingleton();
-  let annotatedTag:
-    | Octokit.Response<Octokit.GitCreateTagResponse>
-    | undefined = undefined;
-  if (createAnnotatedTag) {
-    core.debug(`Creating annotated tag.`);
-    annotatedTag = await octokit.git.createTag({
-      ...context.repo,
-      tag: newTag,
-      message: newTag,
-      object: GITHUB_SHA,
-      type: 'commit',
-    });
-  }
-
   core.debug(`Pushing new tag to the repo.`);
   await octokit.git.createRef({
     ...context.repo,
     ref: `refs/tags/${newTag}`,
-    sha: annotatedTag ? annotatedTag.data.sha : GITHUB_SHA,
+    sha: GITHUB_SHA,
   });
 }

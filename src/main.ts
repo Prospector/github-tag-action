@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { gte, inc, parse, ReleaseType, SemVer, valid } from 'semver';
+import { inc, parse, ReleaseType, SemVer, valid } from 'semver';
 import {
   getLatestTag,
   getValidTags,
@@ -66,7 +66,7 @@ export default async () => {
       return;
     }
 
-    await createTag(newTag, false, GITHUB_SHA);
+    await createTag(newTag, GITHUB_SHA);
   } catch (error) {
     core.setFailed(error.message);
   }
